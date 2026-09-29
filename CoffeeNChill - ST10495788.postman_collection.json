@@ -1,0 +1,375 @@
+{
+  "info": {
+    "_postman_id": "33f9b588-6973-4ce1-abf8-223abf4314de",
+    "name": "CoffeeNChill - ST10495788",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "57410408",
+    "_collection_link": "https://go.postman.co/collection/57410408-33f9b588-6973-4ce1-abf8-223abf4314de?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Menu Management",
+      "item": [
+        {
+          "name": "Create Menu Items",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Cappuccino was created successfully\", function () {\r\n    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r\n});\r\n\r\npm.test(\"Cappuccino details are correct\", function () {\r\n    const jsonData = pm.response.json();\r\n\r\n    pm.expect(jsonData.name).to.eql(\"Cappuccino\");\r\n    pm.expect(jsonData.partitionKey).to.eql(\"Hot Drinks\");\r\n    pm.expect(jsonData.price).to.eql(37.89);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"partitionKey\": \"Hot Drinks\",\r\n  \"rowKey\": \"HOT-428\",\r\n  \"name\": \"Cappuccino\",\r\n  \"description\": \"Espresso with steamed milk and milk foam\",\r\n  \"price\": 37.89,\r\n  \"isAvailable\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/menu",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "menu"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Menu Items",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200 OK\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Response is an array\", function () {\r\n    const jsonData = pm.response.json();\r\n    pm.expect(jsonData).to.be.an(\"array\");\r\n});\r\n\r\npm.test(\"Chicken Alfredo Pasta exists\", function () {\r\n    const jsonData = pm.response.json();\r\n\r\n    const found = jsonData.some(item =>\r\n        item.name === \"Chicken Alfredo Pasta\"\r\n    );\r\n\r\n    pm.expect(found).to.be.true;\r\n});\r\n\r\npm.test(\"Chocolate Brownie exists\", function () {\r\n    const jsonData = pm.response.json();\r\n\r\n    const found = jsonData.some(item =>\r\n        item.name === \"Chocolate Brownie\"\r\n    );\r\n\r\n    pm.expect(found).to.be.true;\r\n});\r\n\r\npm.test(\"Cappuccino exists\", function () {\r\n    const jsonData = pm.response.json();\r\n\r\n    const found = jsonData.some(item =>\r\n        item.name === \"Cappuccino\"\r\n    );\r\n\r\n    pm.expect(found).to.be.true;\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/menu",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "menu"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Menu Items By Category",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200 OK\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Response is an array\", function () {\r\n    const jsonData = pm.response.json();\r\n    pm.expect(jsonData).to.be.an(\"array\");\r\n});\r\n\r\npm.test(\"Cappuccino is returned\", function () {\r\n    const jsonData = pm.response.json();\r\n\r\n    const found = jsonData.some(item =>\r\n        item.name === \"Cappuccino\"\r\n    );\r\n\r\n    pm.expect(found).to.be.true;\r\n});\r\n\r\npm.test(\"All returned items belong to Hot Drinks\", function () {\r\n    const jsonData = pm.response.json();\r\n\r\n    jsonData.forEach(item => {\r\n        pm.expect(item.partitionKey).to.eql(\"Hot Drinks\");\r\n    });\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseURL}}/menu/category/Hot%20Drinks",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "menu",
+                "category",
+                "Hot%20Drinks"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Menu Items",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Chicken Alfredo Pasta was updated successfully\", function () {\r\n    pm.expect(pm.response.code).to.be.oneOf([200, 204]);\r\n});\r\n\r\nif (pm.response.code === 200 && pm.response.text().length > 0) {\r\n    const jsonData = pm.response.json();\r\n\r\n    pm.test(\"Updated price is correct\", function () {\r\n        pm.expect(jsonData.price).to.eql(94.99);\r\n    });\r\n}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Chicken Alfredo Pasta\",\r\n  \"description\": \"Creamy Alfredo pasta with grilled chicken, parmesan and herbs\",\r\n  \"price\": 94.99,\r\n  \"isAvailable\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseURL}}/menu/Main%20Course/MCO-483",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "menu",
+                "Main%20Course",
+                "MCO-483"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Menu Items",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  ""
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseURL}}}/menu/Dessert%20/DES-731",
+              "host": [
+                "{{baseURL}}}"
+              ],
+              "path": [
+                "menu",
+                "Dessert%20",
+                "DES-731"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Staff Documents",
+      "item": [
+        {
+          "name": "Upload Staff Document",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Staff training record uploaded successfully\", function () {\r\n    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "",
+                  "type": "file",
+                  "src": [
+                    "/C:/Users/User/Downloads/Staff_Training.txt"
+                  ]
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseURL}}/documents/upload",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "documents",
+                "upload"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Staff Documents",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200 OK\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Response is an array\", function () {\r\n    const jsonData = pm.response.json();\r\n    pm.expect(jsonData).to.be.an(\"array\");\r\n});\r\n\r\npm.test(\"Staff training record exists\", function () {\r\n    const jsonData = pm.response.json();\r\n\r\n    const found = jsonData.some(document => {\r\n        const fileName =\r\n            document.name ??\r\n            document.fileName ??\r\n            document.Name ??\r\n            document.FileName;\r\n\r\n        return fileName === \"Staff_Training.txt\";\r\n    });\r\n\r\n    pm.expect(found).to.be.true;\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseURL}}/documents",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "documents"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Download Staff Document",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Document downloaded successfully\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Downloaded document is not empty\", function () {\r\n    pm.expect(pm.response.text().length).to.be.above(0);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseURL}}/documents/download/Staff_Training.txt",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "documents",
+                "download",
+                "Staff_Training.txt"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Invalid Menu Item Validation",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Invalid menu item returns 400\", function () {\r\n    pm.response.to.have.status(400);\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"partitionKey\": \"Main Course\",\r\n  \"rowKey\": \"BAD-001\",\r\n  \"name\": \"\",\r\n  \"description\": \"Invalid item used for validation testing\",\r\n  \"price\": -10.00,\r\n  \"isAvailable\": true\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:7071/api/menu",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "7071",
+          "path": [
+            "api",
+            "menu"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Missing document returns 404",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Missing document returns 404\", function () {\r\n    pm.response.to.have.status(404);\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:7071/documents/download/Nonexistent_Aurora_File_999.txt",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "7071",
+          "path": [
+            "documents",
+            "download",
+            "Nonexistent_Aurora_File_999.txt"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseURL",
+      "value": ""
+    },
+    {
+      "key": "menuId",
+      "value": ""
+    }
+  ]
+}

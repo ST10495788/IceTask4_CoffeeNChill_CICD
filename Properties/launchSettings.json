@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "POE_CoffeeNChill": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7283",
+      "launchBrowser": false
+    }
+  }
+}
