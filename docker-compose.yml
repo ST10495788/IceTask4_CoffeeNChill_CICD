@@ -1,7 +1,7 @@
 services:
 
   coffeenchill:
-    image: shambhavisaxena/coffeenchill:latest
+    image: shambhavisaxena/coffeenchill-icetask4:latest
     container_name: coffeenchill
     ports:
       - "8080:80"
