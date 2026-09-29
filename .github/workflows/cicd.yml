@@ -19,7 +19,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '10.0.x'
+        dotnet-version: '10.0.x'
 
       - name: Restore dependencies
         run: dotnet restore POE_CoffeeNChill.slnx
@@ -29,3 +29,22 @@ jobs:
 
       - name: Run unit tests
         run: dotnet test POE_CoffeeNChill.Tests/POE_CoffeeNChill.Tests.csproj --no-build --configuration Release
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+              - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/coffeenchill-icetask4:v${{ github.run_number }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/coffeenchill-icetask4:latest
