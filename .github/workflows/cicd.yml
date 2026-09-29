@@ -48,7 +48,6 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/coffeenchill-icetask4:v${{ github.run_number }}
             ${{ secrets.DOCKERHUB_USERNAME }}/coffeenchill-icetask4:latest
-
       - name: Deploy to VM
         uses: appleboy/ssh-action@v1.2.0
         with:
@@ -57,5 +56,5 @@ jobs:
           key: ${{ secrets.VM_SSH_KEY }}
           script: |
             cd ~/IceTask4_CoffeeNChill_CICD
-            docker-compose pull
-            docker-compose up -d
+            docker compose pull
+            docker compose up -d
