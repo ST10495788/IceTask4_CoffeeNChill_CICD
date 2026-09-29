@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="POE_CoffeeNChill.csproj" />
+  <Project Path="POE_CoffeeNChill.Tests/POE_CoffeeNChill.Tests.csproj" Id="c516f5e8-ba22-482a-9e24-d467fc820f62" />
 </Solution>
